@@ -29,8 +29,8 @@ public class CommonGroupCode {
     @Comment("그룹코드 정렬순서")
     private Integer sortNo;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
-    private List<CommonCode> commonCodes;
+//    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
+//    private List<CommonCode> commonCodes;
 
     @Comment("사용여부")
     private String useYn = "Y";

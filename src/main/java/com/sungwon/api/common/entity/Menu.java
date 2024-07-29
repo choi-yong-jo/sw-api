@@ -1,6 +1,5 @@
 package com.sungwon.api.common.entity;
 
-import com.sungwon.api.common.entity.AuditingAt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

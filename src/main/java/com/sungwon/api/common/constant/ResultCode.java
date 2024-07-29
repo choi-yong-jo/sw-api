@@ -16,8 +16,11 @@ public enum ResultCode {
     NOT_FOUND_UP_MENU_ID("Not Found Menu ID", "상위메뉴 ID 찾을 수 없습니다."),
     NOT_FOUND_MENU("Not Found Menu", "해당 메뉴를 찾을 수 없습니다."),
     // CommonCode
+    NO_FOUND_COMMON_GROUP_CODE("No Found CommonGroupCode", "공통그룹코드의 정보가 없습니다."),
     NO_MODIFY_COMMON_GROUP_CODE("No Modify CommonGroupCode", "공통그룹코드를 수정할 수 없습니다."),
+    NO_DELETE_COMMON_GROUP_CODE("No Delete CommonGroupCode", "공통그룹코드를 삭제할 수 없습니다."),
     NO_INSERT_SAME_COMMON_GROUP_CODE("No Insert Same CommonGroupCode", "같은 공통그룹코드를 등록할 수 없습니다."),
+    NO_FOUND_COMMON_CODE("No Found CommonCode", "공통코드의 정보가 없습니다."),
     NO_INSERT_SAME_COMMON_CODE("No Insert Same CommonCode", "같은 공통코드를 등록할 수 없습니다."),
     // MEMBER
     NOT_FOUND_MEMBER("Not Found Menu", "해당 회원정보를 찾을 수 없습니다."),

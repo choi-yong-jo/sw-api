@@ -21,14 +21,17 @@ public class CommonCode {
     @Comment("공통코드 PK")
     private Long id;
 
+    @Column(length = 10, nullable = false)
     @Comment("코드")
-    private String codeCd;
+    private String code;
 
+    @Column(length = 10, nullable = false)
     @Comment("그룹코드")
-    private String codeGroupCd;
+    private String groupCode;
 
+    @Column(length = 20, nullable = false)
     @Comment("코드명")
-    private String codeNm;
+    private String codeName;
 
     @Comment("코드설명")
     private String description;

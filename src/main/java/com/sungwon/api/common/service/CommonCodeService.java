@@ -7,7 +7,6 @@ import com.sungwon.api.common.dto.CommonGroupCodeDTO;
 import com.sungwon.api.common.dto.ResponseDTO;
 import com.sungwon.api.common.entity.CommonCode;
 import com.sungwon.api.common.entity.CommonGroupCode;
-import com.sungwon.api.common.entity.Menu;
 import com.sungwon.api.common.repository.CommonCodeRepository;
 import com.sungwon.api.common.repository.CommonGroupCodeRepository;
 import com.sungwon.api.common.utility.CommonUtil;
@@ -18,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,7 @@ public class CommonCodeService {
         return responseDTO;
     }
 
+    @Transactional("transactionManager")
     public ResponseDTO insertCommonGroupCode(CommonGroupCodeDTO dto) {
         CommonGroupCode commonGroupCode = new CommonGroupCode();
         BeanUtils.copyProperties(dto, commonGroupCode);
@@ -64,6 +65,7 @@ public class CommonCodeService {
         return responseDTO;
     }
 
+    @Transactional("transactionManager")
     public ResponseDTO modifyCommonGroupCode(Long id, CommonGroupCodeDTO dto) {
         Optional<CommonGroupCode> group = commonGroupCodeRepository.findById(id);
         ResponseDTO responseDTO = new ResponseDTO();
@@ -84,13 +86,36 @@ public class CommonCodeService {
                 responseDTO.setResultCode(ResultCode.NO_MODIFY_COMMON_GROUP_CODE.getName());
                 responseDTO.setMsg(ResultCode.NO_MODIFY_COMMON_GROUP_CODE.getValue());
             }
+        } else {
+            responseDTO.setResultCode(ResultCode.NO_FOUND_COMMON_GROUP_CODE.getName());
+            responseDTO.setMsg(ResultCode.NO_FOUND_COMMON_GROUP_CODE.getValue());
         }
 
         return responseDTO;
     }
 
-    public ResponseDTO removeCommonGroupCode() {
+    @Transactional("transactionManager")
+    public ResponseDTO removeCommonGroupCode(Long id) {
+        Optional<CommonGroupCode> group = commonGroupCodeRepository.findById(id);
         ResponseDTO responseDTO = new ResponseDTO();
+        if(group.isPresent()) {
+            List<CommonCode> codeList = commonCodeRepository.findByGroupCode(group.get().getGroupCode());
+            if(codeList.isEmpty()) {
+                CommonGroupCode commonGroupCode = new CommonGroupCode();
+                BeanUtils.copyProperties(group, commonGroupCode);
+                commonGroupCode.setUseYn("N");
+                commonGroupCodeRepository.save(commonGroupCode);
+                responseDTO.setResultCode(ResultCode.UPDATE.getName());
+                responseDTO.setMsg(ResultCode.UPDATE.getValue());
+                responseDTO.setRes(commonGroupCode);
+            } else {
+                responseDTO.setResultCode(ResultCode.NO_MODIFY_COMMON_GROUP_CODE.getName());
+                responseDTO.setMsg(ResultCode.NO_MODIFY_COMMON_GROUP_CODE.getValue());
+            }
+        } else {
+            responseDTO.setResultCode(ResultCode.NO_FOUND_COMMON_GROUP_CODE.getName());
+            responseDTO.setMsg(ResultCode.NO_FOUND_COMMON_GROUP_CODE.getValue());
+        }
 
         return responseDTO;
     }
@@ -114,6 +139,7 @@ public class CommonCodeService {
         return responseDTO;
     }
 
+    @Transactional("transactionManager")
     public ResponseDTO insertCommonCode(CommonCodeDTO dto) {
         CommonCode commonCode = new CommonCode();
         BeanUtils.copyProperties(dto, commonCode);
@@ -127,21 +153,49 @@ public class CommonCodeService {
         return responseDTO;
     }
 
-    public ResponseDTO modifyCommonCode(CommonCodeDTO dto) {
+    @Transactional("transactionManager")
+    public ResponseDTO modifyCommonCode(Long id, CommonCodeDTO dto) {
+        Optional<CommonCode> code = commonCodeRepository.findById(id);
         ResponseDTO responseDTO = new ResponseDTO();
+        if(code.isPresent()) {
+            CommonCode commonCode = new CommonCode();
+            BeanUtils.copyProperties(dto, commonCode);
+            commonCode.setId(id);
+            commonCodeRepository.save(commonCode);
+            responseDTO.setResultCode(ResultCode.UPDATE.getName());
+            responseDTO.setMsg(ResultCode.UPDATE.getValue());
+            responseDTO.setRes(commonCode);
+        } else {
+            responseDTO.setResultCode(ResultCode.NO_FOUND_COMMON_CODE.getName());
+            responseDTO.setMsg(ResultCode.NO_FOUND_COMMON_CODE.getValue());
+        }
 
         return responseDTO;
     }
 
-    public ResponseDTO removeCommonCode(CommonCodeDTO dto) {
+    @Transactional("transactionManager")
+    public ResponseDTO removeCommonCode(Long id) {
+        Optional<CommonCode> code = commonCodeRepository.findById(id);
         ResponseDTO responseDTO = new ResponseDTO();
+        if(code.isPresent()) {
+            CommonCode commonCode = new CommonCode();
+            BeanUtils.copyProperties(code, commonCode);
+            commonCode.setUseYn("N");
+            commonCodeRepository.save(commonCode);
+            responseDTO.setResultCode(ResultCode.DELETE.getName());
+            responseDTO.setMsg(ResultCode.DELETE.getValue());
+            responseDTO.setRes(commonCode);
+        } else {
+            responseDTO.setResultCode(ResultCode.NO_FOUND_COMMON_CODE.getName());
+            responseDTO.setMsg(ResultCode.NO_FOUND_COMMON_CODE.getValue());
+        }
 
         return responseDTO;
     }
 
     private ResponseDTO validationCheckCommonCode(CommonCode commonCode) {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<CommonGroupCode> codes = commonGroupCodeRepository.findByGroupCode(commonCode.getCodeCd());
+        List<CommonGroupCode> codes = commonGroupCodeRepository.findByGroupCode(commonCode.getCode());
         if(codes.size() > 0) {
             responseDTO.setResultCode(ResultCode.NO_INSERT_SAME_COMMON_CODE.getName());
             responseDTO.setMsg(ResultCode.NO_INSERT_SAME_COMMON_CODE.getValue());

@@ -98,10 +98,6 @@ public class MemberService {
 		return responseDTO;
 	}
 
-	public ArrayList<HashMap<String, Object>> findAll2() {
-		return memberMapper.findAll();
-	}
-
 	private ResponseDTO searchInfo(SearchRequestMemberDTO dto) {
 		List<Tuple> result;
 		m = QMember.member;

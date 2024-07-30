@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sungwon.api.member.mapper.MemberMapper">
+    <select id="findAll" resultType="HashMap">
+        select   m.member_id
+                 , m.email
+                 , m.mobile
+                 , m.member_nm
+                 , t.team_nm
+                 , STRING_AGG(CAST(r.role_nm AS VARCHAR), ',') as roles
+        from admin.member m
+        inner join admin.team t on m.team_id = t.team_id
+        inner join admin.member_role mr on m.member_seq = mr.member_seq
+        inner join admin.role r on mr.role_seq = r.role_seq
+        where m.use_yn = 'Y'
+        group by m.member_id, m.email, m.mobile , m.member_nm, t.team_nm
+    </select>
+</mapper>

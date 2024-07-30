@@ -6,6 +6,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sungwon.api.member.mapper.MemberMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import com.sungwon.api.common.constant.ResultCode;
@@ -39,6 +40,9 @@ import static com.sungwon.api.config.auth.JwtConstants.*;
 public class MemberService {
 
 	@Autowired
+	private MemberMapper memberMapper;
+
+	@Autowired
 	private MemberRepository memberRepository;
 
 	@Autowired
@@ -60,26 +64,42 @@ public class MemberService {
 	QMemberRole mr;
 	QTeam t;
 	QRole r;
-
 	
 	public ResponseDTO findAll() {
+		ResponseDTO responseDTO = new ResponseDTO();
+
 		// [1번째 방식] JPA 형식으로 list 구현
-		List<Member> members = new ArrayList<>();
-		memberRepository.findByUseYn("Y").forEach(e -> members.add((Member) e));
+//		List<Member> members = new ArrayList<>();
+//		memberRepository.findByUseYn("Y").forEach(e -> members.add((Member) e));
 
 		// [2번째 방식] queryDSL 이용한 list 구현
 //		List<Member> members = selectMember("Y");
-//		ResponseDTO responseDTO = commonUtilService.selectObject(members);
+//		responseDTO = commonUtilService.selectObject(members);
 
 		// [3번째 방식] Member 테이블에 Team 조인, MemberRole 서브쿼리한 queryDSL
-//		ResponseDTO responseDTO = selectMemberInfo("Y");
+//		responseDTO = selectMemberInfo("Y");
 
 		// [4번째 방식] 검색조건(where) 사용한 queryDSL
-		SearchRequestMemberDTO requestDTO = new SearchRequestMemberDTO();
-		requestDTO.setUseYn("Y");
-		ResponseDTO responseDTO = searchInfo(requestDTO);
+//		SearchRequestMemberDTO requestDTO = new SearchRequestMemberDTO();
+//		requestDTO.setUseYn("Y");
+//		responseDTO = searchInfo(requestDTO);
+
+		// [5번째 방식] MyBatis의 SQL 이용한 방식
+		ArrayList<HashMap<String, Object>> list = memberMapper.findAll();
+		if(list.size() > 0) {
+			responseDTO.setResultCode(ResultCode.SUCCESS.getName());
+			responseDTO.setMsg(ResultCode.SUCCESS.getValue());
+			responseDTO.setRes(list);
+		} else {
+			responseDTO.setResultCode(ResultCode.NOT_FOUND_INFO.getName());
+			responseDTO.setMsg(ResultCode.NOT_FOUND_INFO.getValue());
+		}
 
 		return responseDTO;
+	}
+
+	public ArrayList<HashMap<String, Object>> findAll2() {
+		return memberMapper.findAll();
 	}
 
 	private ResponseDTO searchInfo(SearchRequestMemberDTO dto) {

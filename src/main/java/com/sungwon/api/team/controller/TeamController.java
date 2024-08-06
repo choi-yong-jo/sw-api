@@ -47,8 +47,8 @@ public class TeamController {
     }
 
     @Operation(summary = "부서수정")
-    @PatchMapping
-    public ResponseEntity<?> updateTeam(@RequestParam Long teamSeq,@RequestBody TeamDTO dto) {
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<?> updateTeam(@PathVariable("id") Long teamSeq,@RequestBody TeamDTO dto) {
         ResponseDTO responseDTO = teamService.update(teamSeq, dto);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

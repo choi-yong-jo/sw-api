@@ -81,9 +81,9 @@ public class MemberController {
     }
 
     @Operation(summary = "회원수정(기존 회원권한삭제 및 회원권한등록)")
-    @PatchMapping
+    @PatchMapping(value = "/{id}")
     @Transactional("transactionManager")
-    public ResponseEntity<?> updateMember(@RequestParam Long memberSeq ,@RequestBody MemberDTO dto) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> updateMember(@PathVariable("id") Long memberSeq ,@RequestBody MemberDTO dto) throws NoSuchAlgorithmException {
         dto.setPassword(SHA256.encrypt(dto.getPassword()));
         ResponseDTO responseDTO = memberService.getMemberDetail(memberSeq);
         List<MemberDetailDTO> mrList = (List<MemberDetailDTO>) responseDTO.getRes();

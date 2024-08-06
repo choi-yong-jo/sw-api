@@ -52,8 +52,8 @@ public class RoleController {
     }
 
     @Operation(summary = "권한수정")
-    @PatchMapping
-    public ResponseEntity<?> updateRole(@RequestParam("roleSeq") Long roleSeq, @RequestBody RoleDTO dto) {
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<?> updateRole(@PathVariable("id") Long roleSeq, @RequestBody RoleDTO dto) {
         ResponseDTO responseDTO = roleService.update(roleSeq, dto);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

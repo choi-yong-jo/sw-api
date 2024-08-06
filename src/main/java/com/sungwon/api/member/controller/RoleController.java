@@ -60,8 +60,8 @@ public class RoleController {
     }
 
     @Operation(summary = "권한삭제")
-    @DeleteMapping
-    public ResponseEntity<?> deleteRole(@RequestParam("roleSeq") Long roleSeq) throws NoSuchAlgorithmException {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteRole(@PathVariable("id") Long roleSeq) throws NoSuchAlgorithmException {
         ResponseDTO responseDTO = roleService.delete(roleSeq);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

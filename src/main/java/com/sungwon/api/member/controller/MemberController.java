@@ -57,8 +57,8 @@ public class MemberController {
     }
 
     @Operation(summary = "회원상세조회")
-    @GetMapping(value = "/detail")
-    public ResponseEntity<?> getMember(@RequestParam("memberSeq") Long memberSeq){
+    @GetMapping(value = "/detail/{id}")
+    public ResponseEntity<?> getMember(@PathVariable("id") Long memberSeq){
         ResponseDTO responseDTO = memberService.getMemberDetail(memberSeq);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
@@ -105,9 +105,9 @@ public class MemberController {
     }
 
     @Operation(summary = "회원삭제")
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}")
     @Transactional("transactionManager")
-    public ResponseEntity<?> deleteMember(@RequestParam("memberSeq") Long memberSeq) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> deleteMember(@PathVariable("id") Long memberSeq) throws NoSuchAlgorithmException {
         ResponseDTO responseDTO = memberService.delete(memberSeq);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -137,8 +137,8 @@ public class MemberController {
     }
 
     @Operation(summary = "회원권한삭제")
-    @DeleteMapping(value = "/mapping")
-    public ResponseEntity<?> deleteMemberRole(@RequestBody MemberRoleDTO dto) throws NoSuchAlgorithmException {
+    @DeleteMapping(value = "/mapping/{id}")
+    public ResponseEntity<?> deleteMemberRole(@PathVariable("id") MemberRoleDTO dto) throws NoSuchAlgorithmException {
         Optional<Member> m = memberService.findById(dto.getMemberSeq());
         ResponseDTO responseDTO = new ResponseDTO();
         if(m.isPresent()){

@@ -55,8 +55,8 @@ public class TeamController {
     }
 
     @Operation(summary = "부서삭제")
-    @DeleteMapping
-    public ResponseEntity<?> deleteTeam(@RequestParam Long teamSeq) {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteTeam(@PathVariable("id") Long teamSeq) {
         ResponseDTO responseDTO = teamService.delete(teamSeq);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

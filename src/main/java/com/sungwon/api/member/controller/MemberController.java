@@ -1,5 +1,6 @@
 package com.sungwon.api.member.controller;
 
+import com.sungwon.api.common.utility.Header;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.sungwon.api.common.constant.ResultCode;
@@ -15,6 +16,8 @@ import com.sungwon.api.member.repository.MemberRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +48,12 @@ public class MemberController {
         ResponseDTO responseDTO = memberService.findAll();
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @Operation(summary = "회원조회")
+    @GetMapping(value = "/list2")
+    public Header<List<MemberDTO>> memberList(@PageableDefault(sort = {"memberSeq"}) Pageable pageable) {
+        return memberService.getMemberList(pageable);
     }
 
     @Operation(summary = "로그인")

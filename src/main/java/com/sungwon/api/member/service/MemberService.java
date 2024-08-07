@@ -6,6 +6,8 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sungwon.api.common.utility.Header;
+import com.sungwon.api.common.utility.Pagination;
 import com.sungwon.api.member.mapper.MemberMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -25,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,6 +100,32 @@ public class MemberService {
 		}
 
 		return responseDTO;
+	}
+
+	public Header<List<MemberDTO>> getMemberList(Pageable pageable) {
+		List<MemberDTO> list = new ArrayList<>();
+
+		Page<Member> members = memberRepository.findAllByOrderByMemberSeqDesc(pageable);
+		for (Member m : members) {
+			MemberDTO dto = MemberDTO.builder()
+					.memberSeq(m.getMemberSeq())
+					.memberId(m.getMemberId())
+					.name(m.getName())
+					.teamId(m.getTeamId())
+					.mobile(m.getMobile())
+					.build();
+
+			list.add(dto);
+		}
+
+		Pagination pagination = new Pagination(
+                (int) members.getTotalElements()
+                , pageable.getPageNumber() + 1
+				, pageable.getPageSize()
+				, 10
+		);
+
+		return Header.OK(list, pagination);
 	}
 
 	private ResponseDTO searchInfo(SearchRequestMemberDTO dto) {
@@ -175,6 +205,7 @@ public class MemberService {
 		queryFactory = new JPAQueryFactory(em);
 		info = queryFactory.from(m)
 				.select(m.memberId
+						, t.teamId
 						, t.teamNm
 						, m.name
 						, m.email
@@ -188,7 +219,7 @@ public class MemberService {
 				.where(m.memberSeq.eq(memberSeq))
 				.fetch().stream().toList();
 		
-		String[] column = {"memberId","teamNm","name","email","mobile","roles"};
+		String[] column = {"memberId","teamId","teamNm","name","email","mobile","roles"};
 		ResponseDTO data = commonUtil.convertJsonArray(column, info);
 		return data;
 	}
@@ -313,6 +344,7 @@ public class MemberService {
 				memberRoleRepository.save(memberRole);
 				responseDTO.setResultCode(ResultCode.SUCCESS.getName());
 				responseDTO.setMsg(ResultCode.SUCCESS.getValue());
+				responseDTO.setRes(memberRole);
 			} else {
 				responseDTO.setResultCode(ResultCode.NOT_INSERT_MEMBER_ROLE_CHECK.getName());
 				responseDTO.setMsg(ResultCode.NOT_INSERT_MEMBER_ROLE_CHECK.getValue());

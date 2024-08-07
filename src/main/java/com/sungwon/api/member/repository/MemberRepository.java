@@ -2,6 +2,8 @@ package com.sungwon.api.member.repository;
 
 import com.sungwon.api.member.entity.Member;
 import com.sungwon.api.common.repository.GenericRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -24,4 +26,6 @@ public interface MemberRepository extends GenericRepository<Member> {
     Iterable<Object> findByUseYn(String useYn);
 
     Optional<Member> findByMemberSeq(Long memberSeq);
+
+    Page<Member> findAllByOrderByMemberSeqDesc(Pageable pageable);
 }

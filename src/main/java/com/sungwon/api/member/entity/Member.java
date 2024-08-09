@@ -2,14 +2,21 @@ package com.sungwon.api.member.entity;
 
 import jakarta.persistence.*;
 import com.sungwon.api.common.entity.AuditingAt;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.util.List;
 
-@Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(schema = "admin")
+@Entity
+@Comment("회원 테이블")
 public class Member extends AuditingAt {
 
     @Id

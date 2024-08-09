@@ -61,7 +61,7 @@ public class SpringDocConfig {
     }
 
     @Bean
-    public GroupedOpenApi system() {
+    public GroupedOpenApi common() {
         return GroupedOpenApi.builder()
             .group("common")
                 .pathsToMatch(
@@ -69,6 +69,16 @@ public class SpringDocConfig {
                         "/api/menu/**"
                 )
             .build();
+    }
+
+    @Bean
+    public GroupedOpenApi board() {
+        return GroupedOpenApi.builder()
+                .group("board")
+                .pathsToMatch(
+                        "/api/board/**"
+                )
+                .build();
     }
 
 //    @Bean

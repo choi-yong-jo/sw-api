@@ -83,7 +83,12 @@ public class MemberController {
             Member m = (Member) responseDTO.getRes();
             mr.setMemberSeq(m.getMemberSeq());
             mr.setRoles(dto.getRoles());
-            responseDTO = memberService.insertMemberRole(mr);
+            ResponseDTO mappingResult = memberService.insertMemberRole(mr);
+            if(!mappingResult.getResultCode().equals("INSERT")) {
+                responseDTO.setResultCode(mappingResult.getResultCode());
+                responseDTO.setMsg(mappingResult.getMsg());
+                responseDTO.setRes(null);
+            }
         }
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

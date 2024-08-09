@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/menu/**").permitAll()
                 .requestMatchers("/api/role/**").permitAll()
                 .requestMatchers("/api/team/**").permitAll()
+                .requestMatchers("/api/board/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/elastic/**").permitAll()
         );

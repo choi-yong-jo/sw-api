@@ -27,5 +27,5 @@ public interface MemberRepository extends GenericRepository<Member> {
 
     Optional<Member> findByMemberSeq(Long memberSeq);
 
-    Page<Member> findAllByOrderByMemberSeqDesc(Pageable pageable);
+    Page<Member> findByUseYnOrderByMemberSeqDesc(Pageable pageable, String useYn);
 }

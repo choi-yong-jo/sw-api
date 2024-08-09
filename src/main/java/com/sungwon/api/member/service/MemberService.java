@@ -105,7 +105,7 @@ public class MemberService {
 	public Header<List<MemberDTO>> getMemberList(Pageable pageable) {
 		List<MemberDTO> list = new ArrayList<>();
 
-		Page<Member> members = memberRepository.findAllByOrderByMemberSeqDesc(pageable);
+		Page<Member> members = memberRepository.findByUseYnOrderByMemberSeqDesc(pageable, "Y");
 		for (Member m : members) {
 			MemberDTO dto = MemberDTO.builder()
 					.memberSeq(m.getMemberSeq())
@@ -342,8 +342,8 @@ public class MemberService {
 				memberRole.setMemberSeq(dto.getMemberSeq());
 				memberRole.setRoleSeq(Long.valueOf(role[i]));
 				memberRoleRepository.save(memberRole);
-				responseDTO.setResultCode(ResultCode.SUCCESS.getName());
-				responseDTO.setMsg(ResultCode.SUCCESS.getValue());
+				responseDTO.setResultCode(ResultCode.INSERT.getName());
+				responseDTO.setMsg(ResultCode.INSERT.getValue());
 				responseDTO.setRes(memberRole);
 			} else {
 				responseDTO.setResultCode(ResultCode.NOT_INSERT_MEMBER_ROLE_CHECK.getName());

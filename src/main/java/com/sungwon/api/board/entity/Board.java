@@ -28,7 +28,6 @@ public class Board extends AuditingAt {
     @Comment("제목")
     private String title;
 
-    @Lob
     @Comment("내용")
     private String contents;
 

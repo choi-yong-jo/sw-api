@@ -68,6 +68,7 @@ public class BoardService {
         for (Board board : boards) {
             BoardDTO dto = BoardDTO.builder()
                     .boardSeq(board.getBoardSeq())
+                    .boardType(board.getBoardType())
                     .memberId(board.getMemberId())
                     .title(board.getTitle())
                     .contents(board.getContents())

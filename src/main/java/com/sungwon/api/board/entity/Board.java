@@ -44,4 +44,8 @@ public class Board extends AuditingAt {
     @Comment("조회수")
     private Long hit = 0L;
 
+    @Column(columnDefinition = "character", length = 1)
+    @Comment("사용여부")
+    private String useYn = "Y";
+
 }

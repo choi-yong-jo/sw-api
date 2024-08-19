@@ -5,16 +5,16 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sungwon.api.common.utility.Header;
-import com.sungwon.api.common.utility.Pagination;
+import com.sungwon.api.board.entity.Board;
+import com.sungwon.api.common.repository.SearchRepository;
+import com.sungwon.api.common.utility.*;
 import com.sungwon.api.member.mapper.MemberMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import com.sungwon.api.common.constant.ResultCode;
 import com.sungwon.api.common.dto.ResponseDTO;
-import com.sungwon.api.common.utility.CommonUtil;
-import com.sungwon.api.common.utility.RegexUtils;
 import com.sungwon.api.member.dto.request.LoginDTO;
 import com.sungwon.api.member.dto.request.MemberDTO;
 import com.sungwon.api.member.dto.request.MemberRoleDTO;
@@ -36,12 +36,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import static com.querydsl.jpa.JPAExpressions.select;
+import static com.sungwon.api.board.entity.QBoard.board;
 import static com.sungwon.api.config.auth.JwtConstants.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
+	@Autowired
+	private CommonUtil commonUtilService;
 
 	@Autowired
 	private MemberMapper memberMapper;
@@ -61,6 +65,9 @@ public class MemberService {
 	@Autowired
 	CommonUtil commonUtil;
 
+	@Autowired
+	SearchRepository searchRepository;
+
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 	JPAQueryFactory queryFactory;
@@ -77,8 +84,8 @@ public class MemberService {
 //		memberRepository.findByUseYn("Y").forEach(e -> members.add((Member) e));
 
 		// [2번째 방식] queryDSL 이용한 list 구현
-//		List<Member> members = selectMember("Y");
-//		responseDTO = commonUtilService.selectObject(members);
+		List<Member> members = selectMember("Y");
+		responseDTO = commonUtilService.selectObject(members);
 
 		// [3번째 방식] Member 테이블에 Team 조인, MemberRole 서브쿼리한 queryDSL
 //		responseDTO = selectMemberInfo("Y");
@@ -89,23 +96,24 @@ public class MemberService {
 //		responseDTO = searchInfo(requestDTO);
 
 		// [5번째 방식] MyBatis의 SQL 이용한 방식
-		ArrayList<HashMap<String, Object>> list = memberMapper.findAll();
-		if(list.size() > 0) {
-			responseDTO.setResultCode(ResultCode.SUCCESS.getName());
-			responseDTO.setMsg(ResultCode.SUCCESS.getValue());
-			responseDTO.setRes(list);
-		} else {
-			responseDTO.setResultCode(ResultCode.NOT_FOUND_INFO.getName());
-			responseDTO.setMsg(ResultCode.NOT_FOUND_INFO.getValue());
-		}
+//		ArrayList<HashMap<String, Object>> list = memberMapper.findAll();
+//		if(list.size() > 0) {
+//			responseDTO.setResultCode(ResultCode.SUCCESS.getName());
+//			responseDTO.setMsg(ResultCode.SUCCESS.getValue());
+//			responseDTO.setRes(list);
+//		} else {
+//			responseDTO.setResultCode(ResultCode.NOT_FOUND_INFO.getName());
+//			responseDTO.setMsg(ResultCode.NOT_FOUND_INFO.getValue());
+//		}
 
 		return responseDTO;
 	}
 
-	public Header<List<MemberDTO>> getMemberList(Pageable pageable) {
+	public Header<List<MemberDTO>> getMemberList(Pageable pageable, SearchCondition searchCondition) {
 		List<MemberDTO> list = new ArrayList<>();
 
-		Page<Member> members = memberRepository.findByUseYnOrderByMemberSeqDesc(pageable, "Y");
+//		Page<Member> members = memberRepository.findByUseYnOrderByMemberSeqDesc(pageable, "Y");
+		Page<Member> members = searchRepository.findAllByMember(pageable, searchCondition);
 		for (Member m : members) {
 			MemberDTO dto = MemberDTO.builder()
 					.memberSeq(m.getMemberSeq())
@@ -158,13 +166,11 @@ public class MemberService {
 	}
 
 	public List<Member> selectMember(String useYn) {
-		List<Member> list;
 		m = QMember.member;
 		queryFactory = new JPAQueryFactory(em);
-		list = queryFactory
-				.selectFrom(m)
-				.where(m.useYn.eq(useYn))
-				.fetch().stream().toList();
+		JPAQuery<Member> query = queryFactory.selectFrom(m).where(searchRepository.searchMemberKeywords("useYn", "Y"));
+		long total = query.fetch().stream().count();
+		List<Member> list = query.fetch().stream().toList();
 
 		return list;
 	}

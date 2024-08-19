@@ -39,6 +39,8 @@ public class QBoard extends EntityPathBase<Board> {
     //inherited
     public final DateTimePath<java.sql.Timestamp> updatedAt = _super.updatedAt;
 
+    public final StringPath useYn = createString("useYn");
+
     public QBoard(String variable) {
         super(Board.class, forVariable(variable));
     }

@@ -3,11 +3,15 @@ package com.sungwon.api.board.controller;
 import com.sungwon.api.board.dto.BoardDTO;
 import com.sungwon.api.board.entity.Board;
 import com.sungwon.api.board.service.BoardService;
+import com.sungwon.api.common.utility.Header;
+import com.sungwon.api.common.utility.SearchCondition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +30,12 @@ public class BoardController {
     @Operation(summary = "게시물 조회")
     @GetMapping("/list")
     public List<BoardDTO> boardList() { return boardService.getBoardList(); }
+
+    @Operation(summary = "게시물 조회")
+    @GetMapping("/list2")
+    public Header<List<BoardDTO>> searchBoardList(@PageableDefault(sort = {"boardSeq"}) Pageable pageable, SearchCondition searchCondition) {
+        return boardService.searchBoardList(pageable, searchCondition);
+    }
 
     @Operation(summary = "게시물 상세조회")
     @GetMapping("/detail/{id}")

@@ -1,19 +1,42 @@
 package com.sungwon.api.board.service;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sungwon.api.board.dto.BoardDTO;
 import com.sungwon.api.board.entity.Board;
+import com.sungwon.api.board.entity.QBoard;
 import com.sungwon.api.board.repository.BoardRepository;
+import com.sungwon.api.common.repository.SearchRepository;
+import com.sungwon.api.common.utility.Header;
+import com.sungwon.api.common.utility.Pagination;
+import com.sungwon.api.common.utility.SearchCondition;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sungwon.api.board.entity.QBoard.board;
 
 @Service
 public class BoardService {
 
     @Autowired
     BoardRepository boardRepository;
+
+    @PersistenceContext
+    EntityManager em;
+
+    @Autowired
+    SearchRepository searchRepository;
+
+    JPAQueryFactory queryFactory;
+    QBoard b;
 
     /**
      * 게시글 목록 가져오기
@@ -36,6 +59,32 @@ public class BoardService {
         }
 
         return dtos;
+    }
+
+    public Header<List<BoardDTO>> searchBoardList(Pageable pageable, SearchCondition searchCondition) {
+        List<BoardDTO> list = new ArrayList<>();
+
+        Page<Board> boards = searchRepository.findAllByBoard(pageable, searchCondition);
+        for (Board board : boards) {
+            BoardDTO dto = BoardDTO.builder()
+                    .boardSeq(board.getBoardSeq())
+                    .memberId(board.getMemberId())
+                    .title(board.getTitle())
+                    .contents(board.getContents())
+                    .createdAt(board.getCreatedAt())
+                    .build();
+
+            list.add(dto);
+        }
+
+        Pagination pagination = new Pagination(
+                (int) boards.getTotalElements()
+                , pageable.getPageNumber() + 1
+                , pageable.getPageSize()
+                , 10
+        );
+
+        return Header.OK(list, pagination);
     }
 
     /**
@@ -90,4 +139,5 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         boardRepository.delete(board);
     }
+
 }

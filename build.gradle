@@ -65,6 +65,10 @@ dependencies {
 
 }
 
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
 // Querydsl 설정부
 def generated = 'src/main/generated'
 

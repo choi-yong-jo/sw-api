@@ -1,6 +1,7 @@
 package com.sungwon.api.member.controller;
 
 import com.sungwon.api.common.utility.Header;
+import com.sungwon.api.common.utility.SearchCondition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.sungwon.api.common.constant.ResultCode;
@@ -52,8 +53,8 @@ public class MemberController {
 
     @Operation(summary = "회원조회")
     @GetMapping(value = "/list2")
-    public Header<List<MemberDTO>> memberList(@PageableDefault(sort = {"memberSeq"}) Pageable pageable) {
-        return memberService.getMemberList(pageable);
+    public Header<List<MemberDTO>> memberList(@PageableDefault(sort = {"memberSeq"}) Pageable pageable, SearchCondition searchCondition) {
+        return memberService.getMemberList(pageable, searchCondition);
     }
 
     @Operation(summary = "로그인")

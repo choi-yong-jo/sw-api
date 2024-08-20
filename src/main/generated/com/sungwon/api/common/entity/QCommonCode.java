@@ -19,9 +19,14 @@ public class QCommonCode extends EntityPathBase<CommonCode> {
 
     public static final QCommonCode commonCode = new QCommonCode("commonCode");
 
+    public final QAuditingAt _super = new QAuditingAt(this);
+
     public final StringPath code = createString("code");
 
     public final StringPath codeName = createString("codeName");
+
+    //inherited
+    public final DateTimePath<java.sql.Timestamp> createdAt = _super.createdAt;
 
     public final StringPath description = createString("description");
 
@@ -30,6 +35,9 @@ public class QCommonCode extends EntityPathBase<CommonCode> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Integer> sortNo = createNumber("sortNo", Integer.class);
+
+    //inherited
+    public final DateTimePath<java.sql.Timestamp> updatedAt = _super.updatedAt;
 
     public final StringPath useYn = createString("useYn");
 

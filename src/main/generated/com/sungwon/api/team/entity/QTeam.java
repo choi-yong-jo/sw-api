@@ -19,6 +19,11 @@ public class QTeam extends EntityPathBase<Team> {
 
     public static final QTeam team = new QTeam("team");
 
+    public final com.sungwon.api.common.entity.QAuditingAt _super = new com.sungwon.api.common.entity.QAuditingAt(this);
+
+    //inherited
+    public final DateTimePath<java.sql.Timestamp> createdAt = _super.createdAt;
+
     public final StringPath description = createString("description");
 
     public final StringPath teamId = createString("teamId");
@@ -26,6 +31,9 @@ public class QTeam extends EntityPathBase<Team> {
     public final StringPath teamNm = createString("teamNm");
 
     public final NumberPath<Long> teamSeq = createNumber("teamSeq", Long.class);
+
+    //inherited
+    public final DateTimePath<java.sql.Timestamp> updatedAt = _super.updatedAt;
 
     public final StringPath useYn = createString("useYn");
 

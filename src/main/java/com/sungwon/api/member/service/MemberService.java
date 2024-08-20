@@ -348,8 +348,8 @@ public class MemberService {
 				memberRole.setMemberSeq(dto.getMemberSeq());
 				memberRole.setRoleSeq(Long.valueOf(role[i]));
 				memberRoleRepository.save(memberRole);
-				responseDTO.setResultCode(ResultCode.INSERT.getName());
-				responseDTO.setMsg(ResultCode.INSERT.getValue());
+				responseDTO.setResultCode(ResultCode.SUCCESS.getName());
+				responseDTO.setMsg(ResultCode.SUCCESS.getValue());
 				responseDTO.setRes(memberRole);
 			} else {
 				responseDTO.setResultCode(ResultCode.NOT_INSERT_MEMBER_ROLE_CHECK.getName());

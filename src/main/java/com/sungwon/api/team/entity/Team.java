@@ -1,5 +1,6 @@
 package com.sungwon.api.team.entity;
 
+import com.sungwon.api.common.entity.AuditingAt;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +11,10 @@ import org.hibernate.annotations.Comment;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Table(schema = "admin")
 @Entity
 @Comment("부서 테이블")
-public class Team {
+public class Team extends AuditingAt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

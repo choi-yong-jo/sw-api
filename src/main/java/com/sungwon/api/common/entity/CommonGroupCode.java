@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @Table(schema = "admin")
 @Entity
 @Comment("공통그룹코드 테이블")
-public class CommonGroupCode {
+public class CommonGroupCode extends AuditingAt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class CommonGroupCode {
     private String description;
 
     @Comment("그룹코드 정렬순서")
-    private Integer sortNo;
+    private int sortNo;
 
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
 //    private List<CommonCode> commonCodes;

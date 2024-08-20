@@ -19,6 +19,11 @@ public class QCommonGroupCode extends EntityPathBase<CommonGroupCode> {
 
     public static final QCommonGroupCode commonGroupCode = new QCommonGroupCode("commonGroupCode");
 
+    public final QAuditingAt _super = new QAuditingAt(this);
+
+    //inherited
+    public final DateTimePath<java.sql.Timestamp> createdAt = _super.createdAt;
+
     public final StringPath description = createString("description");
 
     public final StringPath groupCode = createString("groupCode");
@@ -28,6 +33,9 @@ public class QCommonGroupCode extends EntityPathBase<CommonGroupCode> {
     public final StringPath groupName = createString("groupName");
 
     public final NumberPath<Integer> sortNo = createNumber("sortNo", Integer.class);
+
+    //inherited
+    public final DateTimePath<java.sql.Timestamp> updatedAt = _super.updatedAt;
 
     public final StringPath useYn = createString("useYn");
 

@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @Table(schema = "admin")
 @Entity
 @Comment("공통코드 테이블")
-public class CommonCode {
+public class CommonCode extends AuditingAt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class CommonCode {
     private String description;
 
     @Comment("코드 정렬순서")
-    private Integer sortNo;
+    private int sortNo;
 
     @Comment("사용여부")
     private String useYn = "Y";

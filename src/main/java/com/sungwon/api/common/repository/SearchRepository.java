@@ -71,7 +71,8 @@ public class SearchRepository {
         m = QMember.member;
         queryFactory = new JPAQueryFactory(em);
         JPAQuery<Member> query = queryFactory.selectFrom(m)
-                .where(searchMemberKeywords(searchCondition.getKey(), searchCondition.getValue()));
+                .where(searchMemberKeywords(searchCondition.getKey(), searchCondition.getValue()), searchMemberKeywords("useYn", "Y"))
+                ;
 
         long total = query.fetch().stream().count();   //여기서 전체 카운트 후 아래에서 조건작업
 

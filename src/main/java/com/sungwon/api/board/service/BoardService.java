@@ -98,6 +98,7 @@ public class BoardService {
                 .title(board.getTitle())
                 .contents(board.getContents())
                 .memberId(board.getMemberId())
+                .boardType(board.getBoardType())
 //                .fileList(board.getFileList())
                 .hit(board.getHit())
                 .createdAt(board.getCreatedAt())

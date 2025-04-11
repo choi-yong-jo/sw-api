@@ -1,0 +1,16 @@
+# spring boot 내장 tomcat > Edit Configurations > Environment variables 값 설정
+
+# postgreSQL
+DATABASE_URL=jdbc:mariadb://localhost:3306/mydb
+DATABASE_USER=myuser
+DATABASE_PASSWORD=mypassword
+
+# mariaDB
+DATABASE_URL=jdbc:mariadb://localhost:3306/mydb
+DATABASE_USER=root
+DATABASE_PASSWORD=1207
+
+# redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+

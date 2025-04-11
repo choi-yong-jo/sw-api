@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 @Slf4j
 @OpenAPIDefinition(
-        info = @Info(title = "성원그룹 API", version = "v1",
+        info = @Info(title = "SW API", version = "v1",
                 description = ""),
         servers = @Server(url = "/")
 )

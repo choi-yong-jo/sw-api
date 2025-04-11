@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -43,6 +44,9 @@ import static com.sungwon.api.config.auth.JwtConstants.*;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
+	@Value("${spring.data.db.string.merge}")
+	private String db_string_merge;
 
 	@Autowired
 	private CommonUtil commonUtilService;
@@ -149,7 +153,7 @@ public class MemberService {
 						, select(Expressions.stringTemplate("concat({0},'팀')", t.teamNm))
 								.from(t)
 								.where(t.teamId.eq(m.teamId))
-						, select(Expressions.stringTemplate("string_agg({0}, '|')", mr.roleSeq.stringValue()))
+						, select(Expressions.stringTemplate(db_string_merge+"({0}, '|')", mr.roleSeq.stringValue()))
 								.from(mr)
 								.where(mr.memberSeq.eq(m.memberSeq))
 				)
@@ -188,7 +192,7 @@ public class MemberService {
 						, select(Expressions.stringTemplate("concat({0},'팀')", t.teamNm))
 							.from(t)
 							.where(t.teamId.eq(m.teamId))
-						, select(Expressions.stringTemplate("string_agg({0}, '|')", mr.roleSeq.stringValue()))
+						, select(Expressions.stringTemplate(db_string_merge+"({0}, '|')", mr.roleSeq.stringValue()))
 							.from(mr)
 							.where(mr.memberSeq.eq(m.memberSeq))
 				)
@@ -216,7 +220,7 @@ public class MemberService {
 						, m.name
 						, m.email
 						, m.mobile
-						, select(Expressions.stringTemplate("string_agg({0}, '|')", r.name))
+						, select(Expressions.stringTemplate(db_string_merge+"({0}, '|')", r.name))
 							.from(mr)
 							.innerJoin(r).on(r.roleSeq.eq(mr.roleSeq))
 							.where(mr.memberSeq.eq(m.memberSeq))

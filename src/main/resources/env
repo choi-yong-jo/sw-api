@@ -1,9 +1,9 @@
 # spring boot 내장 tomcat > Edit Configurations > Environment variables 값 설정
 
 # postgreSQL
-DATABASE_URL=jdbc:mariadb://localhost:3306/mydb
-DATABASE_USER=myuser
-DATABASE_PASSWORD=mypassword
+DATABASE_URL=jdbc:postgresql://localhost:5432/mydb
+DATABASE_USER=cyjo
+DATABASE_PASSWORD=1207
 
 # mariaDB
 DATABASE_URL=jdbc:mariadb://localhost:3306/mydb

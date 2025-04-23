@@ -86,7 +86,7 @@ public class MemberController {
             mr.setMemberSeq(m.getMemberSeq());
             mr.setRoles(dto.getRoles());
             ResponseDTO mappingResult = memberService.insertMemberRole(mr);
-            if(!mappingResult.getResultCode().equals("INSERT")) {
+            if(!mappingResult.getResultCode().equals("SUCCESS")) {
                 responseDTO.setResultCode(mappingResult.getResultCode());
                 responseDTO.setMsg(mappingResult.getMsg());
                 responseDTO.setRes(null);

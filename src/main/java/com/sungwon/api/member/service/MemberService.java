@@ -452,10 +452,10 @@ public class MemberService {
 		if ("I".equals(type) && list.size() > 0) {
 			responseDTO.setResultCode(ResultCode.NOT_INSERT_SAME_MEMBER_ID.getName());
 			responseDTO.setMsg(ResultCode.NOT_INSERT_SAME_MEMBER_ID.getValue());
-		} else if (!RegexUtils.isValidEmail(member.getEmail())) {
+		} else if (member.getEmail() != null && !RegexUtils.isValidEmail(member.getEmail())) {
 			responseDTO.setResultCode(ResultCode.NOT_VALIDATED_EMAIL.getName());
 			responseDTO.setMsg(ResultCode.NOT_VALIDATED_EMAIL.getValue());
-		} else if (!RegexUtils.isValidPhoneNumber(member.getMobile())) {
+		} else if (member.getMobile() != null && !RegexUtils.isValidPhoneNumber(member.getMobile())) {
 			responseDTO.setResultCode(ResultCode.NOT_VALIDATED_MOBILE.getName());
 			responseDTO.setMsg(ResultCode.NOT_VALIDATED_MOBILE.getValue());
 		}

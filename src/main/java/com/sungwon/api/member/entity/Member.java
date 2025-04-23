@@ -27,7 +27,7 @@ public class Member extends AuditingAt {
     @Comment("회원ID")
     private String memberId;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20, nullable = true)
     @Comment("부서ID")
     private String teamId;
 
@@ -39,7 +39,7 @@ public class Member extends AuditingAt {
     @Comment("비밀번호")
     private String password;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = true)
     @Comment("이메일")
     private String email;
 

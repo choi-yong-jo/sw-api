@@ -77,7 +77,6 @@ public class SearchRepository {
         long total = query.fetch().stream().count();   //여기서 전체 카운트 후 아래에서 조건작업
 
         List<Member> results = query
-                .where(searchMemberKeywords(searchCondition.getKey(), searchCondition.getValue()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(m.memberSeq.desc())
@@ -99,6 +98,11 @@ public class SearchRepository {
         } else if ("teamId".equals(key)) {
             if(StringUtils.hasLength(value)) {
                 return m.teamId.contains(value);
+            }
+        } else if ("all".equals(key)) {
+            if(StringUtils.hasLength(value)) {
+                return m.memberId.contains(value)
+                        .or(m.teamId.contains(value));
             }
         }
 

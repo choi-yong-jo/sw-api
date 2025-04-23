@@ -1,5 +1,6 @@
 package com.sungwon.api.member.controller;
 
+import com.sungwon.api.member.exception.MemberServiceException;
 import com.sungwon.api.common.utility.Header;
 import com.sungwon.api.common.utility.SearchCondition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,6 +90,7 @@ public class MemberController {
                 responseDTO.setResultCode(mappingResult.getResultCode());
                 responseDTO.setMsg(mappingResult.getMsg());
                 responseDTO.setRes(null);
+                throw new MemberServiceException(responseDTO); // 예외 발생
             }
         }
 

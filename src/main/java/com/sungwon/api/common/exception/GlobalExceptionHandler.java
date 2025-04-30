@@ -1,4 +1,4 @@
-package com.sungwon.api.common.controller;
+package com.sungwon.api.common.exception;
 
 import com.sungwon.api.common.dto.ResponseDTO;
 import com.sungwon.api.member.exception.MemberServiceException;
